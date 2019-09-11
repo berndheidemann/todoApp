@@ -4,7 +4,7 @@
 <ul>
   <li *ngFor="let todo of todos" (click)="toggle(todo)"
   [class.fertig]="todo.done">
-    {{ todo.label}}
+    {{ todo.label}} foo
   </li>
 </ul>
 <input [(ngModel)]="newTodo.label"><button (click)="save()">save</button>
