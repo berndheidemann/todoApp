@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Todo} from '../../model/Todo';
 
 @Component({
@@ -9,13 +9,22 @@ import {Todo} from '../../model/Todo';
 export class ListComponent implements OnInit {
 
   newTodo: Todo;
-  todos: Todo[] = [];
+  private _todos: Todo[] = [];
+  searchString: string;
 
   constructor() {
-    this.todos.push(new Todo('Rasen mähen'));
-    this.todos.push(new Todo('Bier trinken'));
-    this.todos.push(new Todo('Bier kaufen'));
+    this._todos.push(new Todo('Rasen mähen'));
+    this._todos.push(new Todo('Bier trinken'));
+    this._todos.push(new Todo('Bier kaufen'));
     this.newTodo = new Todo('');
+  }
+
+  get todos(): Todo[] {
+    if (!this.searchString) {
+      return this._todos;
+    } else {
+      return this._todos.filter(t => t.label.includes(this.searchString));
+    }
   }
 
   ngOnInit() {
@@ -26,7 +35,11 @@ export class ListComponent implements OnInit {
   }
 
   save() {
-    this.todos.push(this.newTodo);
+    this._todos.push(this.newTodo);
     this.newTodo = new Todo('');
+  }
+
+  del(todo: Todo) {
+    this._todos = this._todos.filter(t => t !== todo);
   }
 }
