@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Todo} from '../../model/Todo';
+import {TodoDataService} from '../../services/todo-data.service';
 
 @Component({
   selector: 'app-list',
@@ -9,21 +10,18 @@ import {Todo} from '../../model/Todo';
 export class ListComponent implements OnInit {
 
   newTodo: Todo;
-  private _todos: Todo[] = [];
   searchString: string;
 
-  constructor() {
-    this._todos.push(new Todo('Rasen mähen'));
-    this._todos.push(new Todo('Bier trinken'));
-    this._todos.push(new Todo('Bier kaufen'));
-    this.newTodo = new Todo('');
+  constructor(private dataService: TodoDataService) {
+
   }
+
 
   get todos(): Todo[] {
     if (!this.searchString) {
-      return this._todos;
+      return this.dataService.todos;
     } else {
-      return this._todos.filter(t => t.label.includes(this.searchString));
+      return this.dataService.todos.filter(t => t.label.includes(this.searchString));
     }
   }
 
@@ -31,15 +29,12 @@ export class ListComponent implements OnInit {
   }
 
   toggle(todo: Todo) {
-    todo.done = !todo.done;
-  }
-
-  save() {
-    this._todos.push(this.newTodo);
-    this.newTodo = new Todo('');
+    this.dataService.toggle(todo);
   }
 
   del(todo: Todo) {
-    this._todos = this._todos.filter(t => t !== todo);
+    this.dataService.del(todo);
   }
+
+
 }
